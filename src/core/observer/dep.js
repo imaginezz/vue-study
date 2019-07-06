@@ -1,7 +1,11 @@
 /* @flow */
 
+//Dep是发布者，可以订阅多个观察者
+//依赖收集之后Deps中会存在一个或多个Watcher对象，在数据变更的时候通知所有的Watcher
 import type Watcher from './watcher'
-import { remove } from '../util/index'
+import {
+  remove
+} from '../util/index'
 import config from '../config'
 
 let uid = 0
@@ -11,30 +15,30 @@ let uid = 0
  * directives subscribing to it.
  */
 export default class Dep {
-  static target: ?Watcher;
+  static target: ? Watcher;
   id: number;
-  subs: Array<Watcher>;
+  subs: Array < Watcher > ;
 
-  constructor () {
+  constructor() {
     this.id = uid++
     this.subs = []
   }
 
-  addSub (sub: Watcher) {
+  addSub(sub: Watcher) {
     this.subs.push(sub)
   }
 
-  removeSub (sub: Watcher) {
+  removeSub(sub: Watcher) {
     remove(this.subs, sub)
   }
 
-  depend () {
+  depend() {
     if (Dep.target) {
       Dep.target.addDep(this)
     }
   }
 
-  notify () {
+  notify() {
     // stabilize the subscriber list first
     const subs = this.subs.slice()
     if (process.env.NODE_ENV !== 'production' && !config.async) {
@@ -55,12 +59,12 @@ export default class Dep {
 Dep.target = null
 const targetStack = []
 
-export function pushTarget (target: ?Watcher) {
+export function pushTarget(target: ? Watcher) {
   targetStack.push(target)
   Dep.target = target
 }
 
-export function popTarget () {
+export function popTarget() {
   targetStack.pop()
   Dep.target = targetStack[targetStack.length - 1]
 }

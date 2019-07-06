@@ -1,7 +1,9 @@
 /* @flow */
-
+//输出调试信息
 import config from '../config'
-import { noop } from 'shared/util'
+import {
+  noop
+} from 'shared/util'
 
 export let warn = noop
 export let tip = noop
@@ -37,11 +39,11 @@ if (process.env.NODE_ENV !== 'production') {
     if (vm.$root === vm) {
       return '<Root>'
     }
-    const options = typeof vm === 'function' && vm.cid != null
-      ? vm.options
-      : vm._isVue
-        ? vm.$options || vm.constructor.options
-        : vm
+    const options = typeof vm === 'function' && vm.cid != null ?
+      vm.options :
+      vm._isVue ?
+      vm.$options || vm.constructor.options :
+      vm
     let name = options.name || options._componentTag
     const file = options.__file
     if (!name && file) {

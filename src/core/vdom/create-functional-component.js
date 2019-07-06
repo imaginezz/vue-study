@@ -1,11 +1,23 @@
 /* @flow */
 
-import VNode, { cloneVNode } from './vnode'
-import { createElement } from './create-element'
-import { resolveInject } from '../instance/inject'
-import { normalizeChildren } from '../vdom/helpers/normalize-children'
-import { resolveSlots } from '../instance/render-helpers/resolve-slots'
-import { installRenderHelpers } from '../instance/render-helpers/index'
+import VNode, {
+  cloneVNode
+} from './vnode'
+import {
+  createElement
+} from './create-element'
+import {
+  resolveInject
+} from '../instance/inject'
+import {
+  normalizeChildren
+} from '../vdom/helpers/normalize-children'
+import {
+  resolveSlots
+} from '../instance/render-helpers/resolve-slots'
+import {
+  installRenderHelpers
+} from '../instance/render-helpers/index'
 
 import {
   isDef,
@@ -16,12 +28,13 @@ import {
   validateProp
 } from '../util/index'
 
-export function FunctionalRenderContext (
+//功能性渲染上下文（这里还不是太明白是干什么的）
+export function FunctionalRenderContext(
   data: VNodeData,
   props: Object,
-  children: ?Array<VNode>,
-  parent: Component,
-  Ctor: Class<Component>
+  children: ? Array < VNode > ,
+  parent : Component,
+  Ctor: Class < Component >
 ) {
   const options = Ctor.options
   // ensure the createElement function in functional components
@@ -75,13 +88,13 @@ export function FunctionalRenderContext (
 
 installRenderHelpers(FunctionalRenderContext.prototype)
 
-export function createFunctionalComponent (
-  Ctor: Class<Component>,
-  propsData: ?Object,
-  data: VNodeData,
+export function createFunctionalComponent(
+  Ctor: Class < Component > ,
+  propsData: ? Object,
+  data : VNodeData,
   contextVm: Component,
-  children: ?Array<VNode>
-): VNode | Array<VNode> | void {
+  children: ? Array < VNode >
+): VNode | Array < VNode > | void {
   const options = Ctor.options
   const props = {}
   const propOptions = options.props
@@ -116,7 +129,7 @@ export function createFunctionalComponent (
   }
 }
 
-function cloneAndMarkFunctionalResult (vnode, data, contextVm, options, renderContext) {
+function cloneAndMarkFunctionalResult(vnode, data, contextVm, options, renderContext) {
   // #7817 clone node before setting fnContext, otherwise if the node is reused
   // (e.g. it was from a cached normal slot) the fnContext causes named slots
   // that should not be matched to match.
@@ -132,7 +145,7 @@ function cloneAndMarkFunctionalResult (vnode, data, contextVm, options, renderCo
   return clone
 }
 
-function mergeProps (to, from) {
+function mergeProps(to, from) {
   for (const key in from) {
     to[camelize(key)] = from[key]
   }

@@ -1,9 +1,15 @@
 /* @flow */
 
-import { ASSET_TYPES } from 'shared/constants'
-import { isPlainObject, validateComponentName } from '../util/index'
+import {
+  ASSET_TYPES
+} from 'shared/constants'
+import {
+  isPlainObject,
+  validateComponentName
+} from '../util/index'
 
-export function initAssetRegisters (Vue: GlobalAPI) {
+//定义Vue.component Vue.directive Vue.filter
+export function initAssetRegisters(Vue: GlobalAPI) {
   /**
    * Create asset registration methods.
    */
@@ -21,10 +27,14 @@ export function initAssetRegisters (Vue: GlobalAPI) {
         }
         if (type === 'component' && isPlainObject(definition)) {
           definition.name = definition.name || id
+          //默认调用Vue.extend
           definition = this.options._base.extend(definition)
         }
         if (type === 'directive' && typeof definition === 'function') {
-          definition = { bind: definition, update: definition }
+          definition = {
+            bind: definition,
+            update: definition
+          }
         }
         this.options[type + 's'][id] = definition
         return definition

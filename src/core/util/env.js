@@ -23,7 +23,7 @@ if (inBrowser) {
   try {
     const opts = {}
     Object.defineProperty(opts, 'passive', ({
-      get () {
+      get() {
         /* istanbul ignore next */
         supportsPassive = true
       }
@@ -32,6 +32,7 @@ if (inBrowser) {
   } catch (e) {}
 }
 
+//判断是否运行在SSR环境下
 // this needs to be lazy-evaled because vue may be required before
 // vue-server-renderer can set VUE_ENV
 let _isServer
@@ -52,8 +53,9 @@ export const isServerRendering = () => {
 // detect devtools
 export const devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__
 
+//判断是不是浏览器自带的函数
 /* istanbul ignore next */
-export function isNative (Ctor: any): boolean {
+export function isNative(Ctor: any): boolean {
   return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
 }
 
@@ -61,6 +63,7 @@ export const hasSymbol =
   typeof Symbol !== 'undefined' && isNative(Symbol) &&
   typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys)
 
+//如果浏览器原生不支持Set，就使用SimpleSet的一个实现作为Set
 let _Set
 /* istanbul ignore if */ // $flow-disable-line
 if (typeof Set !== 'undefined' && isNative(Set)) {
@@ -70,16 +73,16 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
   // a non-standard Set polyfill that only works with primitive keys.
   _Set = class Set implements SimpleSet {
     set: Object;
-    constructor () {
+    constructor() {
       this.set = Object.create(null)
     }
-    has (key: string | number) {
+    has(key: string | number) {
       return this.set[key] === true
     }
-    add (key: string | number) {
+    add(key: string | number) {
       this.set[key] = true
     }
-    clear () {
+    clear() {
       this.set = Object.create(null)
     }
   }
@@ -91,5 +94,9 @@ interface SimpleSet {
   clear(): void;
 }
 
-export { _Set }
-export type { SimpleSet }
+export {
+  _Set
+}
+export type {
+  SimpleSet
+}

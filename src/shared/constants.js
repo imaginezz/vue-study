@@ -1,3 +1,4 @@
+//定义了一些常量
 export const SSR_ATTR = 'data-server-rendered'
 
 export const ASSET_TYPES = [

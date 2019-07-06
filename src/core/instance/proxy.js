@@ -1,7 +1,11 @@
 /* not type checking this file because flow doesn't play well with Proxy */
 
 import config from 'core/config'
-import { warn, makeMap, isNative } from '../util/index'
+import {
+  warn,
+  makeMap,
+  isNative
+} from '../util/index'
 
 let initProxy
 
@@ -37,10 +41,11 @@ if (process.env.NODE_ENV !== 'production') {
   const hasProxy =
     typeof Proxy !== 'undefined' && isNative(Proxy)
 
+  //代理设置键盘按键命名，防止覆盖原有的名字
   if (hasProxy) {
     const isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact')
     config.keyCodes = new Proxy(config.keyCodes, {
-      set (target, key, value) {
+      set(target, key, value) {
         if (isBuiltInModifier(key)) {
           warn(`Avoid overwriting built-in modifier in config.keyCodes: .${key}`)
           return false
@@ -52,8 +57,9 @@ if (process.env.NODE_ENV !== 'production') {
     })
   }
 
+  //如果key不符合规定（保留字或者不会被代理的data属性），就弹出提示
   const hasHandler = {
-    has (target, key) {
+    has(target, key) {
       const has = key in target
       const isAllowed = allowedGlobals(key) ||
         (typeof key === 'string' && key.charAt(0) === '_' && !(key in target.$data))
@@ -66,7 +72,7 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
   const getHandler = {
-    get (target, key) {
+    get(target, key) {
       if (typeof key === 'string' && !(key in target)) {
         if (key in target.$data) warnReservedPrefix(target, key)
         else warnNonPresent(target, key)
@@ -75,18 +81,22 @@ if (process.env.NODE_ENV !== 'production') {
     }
   }
 
-  initProxy = function initProxy (vm) {
+  initProxy = function initProxy(vm) {
     if (hasProxy) {
       // determine which proxy handler to use
       const options = vm.$options
-      const handlers = options.render && options.render._withStripped
-        ? getHandler
-        : hasHandler
+      //如果已经有render了，那么就加载getHandler，如果没有就加载hashHandler
+      const handlers = options.render && options.render._withStripped ?
+        getHandler :
+        hasHandler
       vm._renderProxy = new Proxy(vm, handlers)
     } else {
+      //不加载Proxy
       vm._renderProxy = vm
     }
   }
 }
 
-export { initProxy }
+export {
+  initProxy
+}
